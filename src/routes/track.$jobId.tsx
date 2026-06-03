@@ -41,43 +41,17 @@ function TrackPage() {
 
   return (
     <AppShell>
-      {/* Map placeholder */}
+      {/* Live map */}
       <div className="relative h-72 overflow-hidden bg-surface">
-        <div className="absolute inset-0 bg-grid opacity-60" />
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-background" />
-        {/* route line */}
-        <svg className="absolute inset-0 h-full w-full" viewBox="0 0 400 300" preserveAspectRatio="none">
-          <path
-            d="M 60 240 Q 160 200 200 160 T 340 60"
-            stroke="oklch(0.62 0.24 25)"
-            strokeWidth="3"
-            strokeDasharray="6 6"
-            fill="none"
-          />
-        </svg>
-        {/* provider marker */}
-        <motion.div
-          initial={{ left: "12%", top: "78%" }}
-          animate={{ left: ["12%", "30%", "50%", "70%"], top: ["78%", "60%", "45%", "25%"] }}
-          transition={{ duration: 20, ease: "linear" }}
-          className="absolute -translate-x-1/2 -translate-y-1/2"
-        >
-          <div className="relative">
-            <span className="absolute inset-0 rounded-full bg-primary/40 animate-ping-slow" />
-            <div className="relative grid h-10 w-10 place-items-center rounded-full bg-emergency text-primary-foreground shadow-glow">
-              <Navigation className="h-4 w-4" />
-            </div>
-          </div>
-        </motion.div>
-        {/* destination marker */}
-        <div className="absolute right-[12%] top-[18%] -translate-x-1/2 -translate-y-1/2">
-          <div className="grid h-10 w-10 place-items-center rounded-full bg-success text-success-foreground shadow-elevated">
-            <Siren className="h-4 w-4" />
-          </div>
-        </div>
+        <LiveMap
+          origin={{ lat: 5.6502, lng: -0.1469 }}
+          destination={{ lat: 5.6363, lng: -0.1739 }}
+          progress={eta > 0 ? 1 - etaLeft / eta : 1}
+        />
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-b from-transparent to-background" />
 
         <div className="absolute left-4 top-4 flex items-center gap-2">
-          <Link to="/" className="grid h-10 w-10 place-items-center rounded-full border border-border bg-background/80 backdrop-blur">
+          <Link to="/" className="pointer-events-auto grid h-10 w-10 place-items-center rounded-full border border-border bg-background/80 backdrop-blur">
             <ChevronLeft className="h-4 w-4" />
           </Link>
           <StatusPill tone="primary">Job #{jobId}</StatusPill>
@@ -88,6 +62,7 @@ function TrackPage() {
       </div>
 
       <section className="px-5 pt-5">
+
         <div className="flex items-baseline justify-between">
           <div>
             <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">Arriving in</p>
