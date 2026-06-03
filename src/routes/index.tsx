@@ -276,3 +276,13 @@ function SectionHeader({ title, hint, right }: { title: string; hint?: string; r
     </div>
   );
 }
+
+function Stat({ icon: Icon, value, label }: { icon: typeof Star; value: React.ReactNode; label: string }) {
+  return (
+    <div className="rounded-2xl border border-border bg-surface-elevated p-3">
+      <Icon className="mx-auto h-4 w-4 text-primary" />
+      <p className="mt-1 font-display text-base font-bold">{value}</p>
+      <p className="text-[10px] uppercase tracking-wider text-muted-foreground">{label}</p>
+    </div>
+  );
+}
