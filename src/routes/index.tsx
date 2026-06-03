@@ -5,6 +5,7 @@ import {
   ShieldCheck, MapPin, ChevronRight, Star, Clock, Zap,
 } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
+import { NearbyMap, useGeolocation } from "@/components/NearbyMap";
 import { StatusPill } from "@/components/StatusPill";
 import { driver, providers, services } from "@/lib/mock-data";
 
