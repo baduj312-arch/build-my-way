@@ -3,7 +3,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import {
   Siren, Wrench, Disc3, Truck, Fuel, BatteryCharging, Key,
-  ShieldCheck, MapPin, ChevronRight, Star, Clock, Zap, Phone,
+  ShieldCheck, MapPin, ChevronRight, Star, Clock, Zap, Phone, Navigation,
 } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
 import { NearbyMap, useGeolocation } from "@/components/NearbyMap";
@@ -245,7 +245,27 @@ function Home() {
                 <p className="mt-0.5">Re-verified every 6 months · ID & license on file.</p>
               </div>
 
-              <div className="mt-5 grid grid-cols-2 gap-2">
+              {(() => {
+                const i = providers.findIndex((p) => p.id === selected.id);
+                const pin = mapPins[i];
+                const latPerKm = 1 / 111;
+                const lngPerKm = 1 / (111 * Math.cos((pos.lat * Math.PI) / 180));
+                const destLat = pin ? pos.lat + pin.offsetKm.y * latPerKm : pos.lat;
+                const destLng = pin ? pos.lng + pin.offsetKm.x * lngPerKm : pos.lng;
+                const directionsHref = `https://www.google.com/maps/dir/?api=1&origin=${pos.lat},${pos.lng}&destination=${destLat},${destLng}&travelmode=driving`;
+                return (
+                  <a
+                    href={directionsHref}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-5 flex items-center justify-center gap-2 rounded-xl border border-primary/40 bg-primary/10 py-3 text-sm font-semibold text-primary"
+                  >
+                    <Navigation className="h-4 w-4" /> Directions from my location
+                  </a>
+                );
+              })()}
+
+              <div className="mt-3 grid grid-cols-2 gap-2">
                 <button className="flex items-center justify-center gap-2 rounded-xl border border-border bg-surface-elevated py-3 text-sm font-semibold">
                   <Phone className="h-4 w-4 text-success" /> Call
                 </button>
