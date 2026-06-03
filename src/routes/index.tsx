@@ -36,6 +36,8 @@ function Home() {
       y: Math.sin((i / 5) * Math.PI * 2) * p.distanceKm,
     },
   }));
+  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const selected = providers.find((p) => p.id === selectedId) ?? null;
   return (
     <AppShell>
       {/* Header */}
