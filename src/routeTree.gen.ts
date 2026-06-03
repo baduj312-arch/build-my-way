@@ -13,9 +13,13 @@ import { Route as SosRouteImport } from './routes/sos'
 import { Route as ProvidersRouteImport } from './routes/providers'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as HistoryRouteImport } from './routes/history'
+import { Route as AuthRouteImport } from './routes/auth'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as TrackJobIdRouteImport } from './routes/track.$jobId'
 import { Route as RateJobIdRouteImport } from './routes/rate.$jobId'
+import { Route as AuthenticatedBroadcastRouteImport } from './routes/_authenticated/broadcast'
+import { Route as AuthenticatedAdminProvidersRouteImport } from './routes/_authenticated/admin/providers'
 
 const SosRoute = SosRouteImport.update({
   id: '/sos',
@@ -37,6 +41,15 @@ const HistoryRoute = HistoryRouteImport.update({
   path: '/history',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -52,67 +65,100 @@ const RateJobIdRoute = RateJobIdRouteImport.update({
   path: '/rate/$jobId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedBroadcastRoute = AuthenticatedBroadcastRouteImport.update({
+  id: '/broadcast',
+  path: '/broadcast',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedAdminProvidersRoute =
+  AuthenticatedAdminProvidersRouteImport.update({
+    id: '/admin/providers',
+    path: '/admin/providers',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
   '/history': typeof HistoryRoute
   '/profile': typeof ProfileRoute
   '/providers': typeof ProvidersRoute
   '/sos': typeof SosRoute
+  '/broadcast': typeof AuthenticatedBroadcastRoute
   '/rate/$jobId': typeof RateJobIdRoute
   '/track/$jobId': typeof TrackJobIdRoute
+  '/admin/providers': typeof AuthenticatedAdminProvidersRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
   '/history': typeof HistoryRoute
   '/profile': typeof ProfileRoute
   '/providers': typeof ProvidersRoute
   '/sos': typeof SosRoute
+  '/broadcast': typeof AuthenticatedBroadcastRoute
   '/rate/$jobId': typeof RateJobIdRoute
   '/track/$jobId': typeof TrackJobIdRoute
+  '/admin/providers': typeof AuthenticatedAdminProvidersRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
+  '/auth': typeof AuthRoute
   '/history': typeof HistoryRoute
   '/profile': typeof ProfileRoute
   '/providers': typeof ProvidersRoute
   '/sos': typeof SosRoute
+  '/_authenticated/broadcast': typeof AuthenticatedBroadcastRoute
   '/rate/$jobId': typeof RateJobIdRoute
   '/track/$jobId': typeof TrackJobIdRoute
+  '/_authenticated/admin/providers': typeof AuthenticatedAdminProvidersRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/auth'
     | '/history'
     | '/profile'
     | '/providers'
     | '/sos'
+    | '/broadcast'
     | '/rate/$jobId'
     | '/track/$jobId'
+    | '/admin/providers'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/auth'
     | '/history'
     | '/profile'
     | '/providers'
     | '/sos'
+    | '/broadcast'
     | '/rate/$jobId'
     | '/track/$jobId'
+    | '/admin/providers'
   id:
     | '__root__'
     | '/'
+    | '/_authenticated'
+    | '/auth'
     | '/history'
     | '/profile'
     | '/providers'
     | '/sos'
+    | '/_authenticated/broadcast'
     | '/rate/$jobId'
     | '/track/$jobId'
+    | '/_authenticated/admin/providers'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
+  AuthRoute: typeof AuthRoute
   HistoryRoute: typeof HistoryRoute
   ProfileRoute: typeof ProfileRoute
   ProvidersRoute: typeof ProvidersRoute
@@ -151,6 +197,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HistoryRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -172,11 +232,40 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RateJobIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/broadcast': {
+      id: '/_authenticated/broadcast'
+      path: '/broadcast'
+      fullPath: '/broadcast'
+      preLoaderRoute: typeof AuthenticatedBroadcastRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/admin/providers': {
+      id: '/_authenticated/admin/providers'
+      path: '/admin/providers'
+      fullPath: '/admin/providers'
+      preLoaderRoute: typeof AuthenticatedAdminProvidersRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
+interface AuthenticatedRouteRouteChildren {
+  AuthenticatedBroadcastRoute: typeof AuthenticatedBroadcastRoute
+  AuthenticatedAdminProvidersRoute: typeof AuthenticatedAdminProvidersRoute
+}
+
+const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedBroadcastRoute: AuthenticatedBroadcastRoute,
+  AuthenticatedAdminProvidersRoute: AuthenticatedAdminProvidersRoute,
+}
+
+const AuthenticatedRouteRouteWithChildren =
+  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
+  AuthRoute: AuthRoute,
   HistoryRoute: HistoryRoute,
   ProfileRoute: ProfileRoute,
   ProvidersRoute: ProvidersRoute,
