@@ -5,6 +5,7 @@ import {
   ShieldCheck, MapPin, ChevronRight, Star, Clock, Zap,
 } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
+import { NearbyMap, useGeolocation } from "@/components/NearbyMap";
 import { StatusPill } from "@/components/StatusPill";
 import { driver, providers, services } from "@/lib/mock-data";
 
@@ -24,6 +25,15 @@ export const Route = createFileRoute("/")({
 
 function Home() {
   const nearby = providers.slice(0, 3);
+  const { pos, state } = useGeolocation({ lat: 5.6502, lng: -0.1469 });
+  const mapPins = providers.slice(0, 5).map((p, i) => ({
+    id: p.id,
+    label: String(i + 1),
+    offsetKm: {
+      x: Math.cos((i / 5) * Math.PI * 2) * p.distanceKm,
+      y: Math.sin((i / 5) * Math.PI * 2) * p.distanceKm,
+    },
+  }));
   return (
     <AppShell>
       {/* Header */}
@@ -127,8 +137,34 @@ function Home() {
         </div>
       </section>
 
+      {/* Live nearby map */}
+      <section className="px-5 pt-6">
+        <SectionHeader
+          title="Live nearby"
+          right={
+            <StatusPill tone={state === "ok" ? "success" : "default"}>
+              <span className="h-1.5 w-1.5 rounded-full bg-current animate-pulse" />
+              {state === "ok" ? "GPS locked" : state === "denied" ? "Demo area" : "Locating…"}
+            </StatusPill>
+          }
+        />
+        <div className="mt-4 overflow-hidden rounded-3xl border border-border">
+          <div className="relative h-44 w-full">
+            <NearbyMap center={pos} pins={mapPins} />
+            <div className="pointer-events-none absolute inset-x-0 bottom-0 h-12 bg-gradient-to-b from-transparent to-card/80" />
+            <Link
+              to="/providers"
+              className="absolute bottom-3 right-3 rounded-full bg-background/90 px-3 py-1.5 text-[11px] font-semibold backdrop-blur"
+            >
+              Open map
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* Nearby providers */}
       <section className="px-5 pt-6">
+
         <SectionHeader
           title="Verified near you"
           right={<Link to="/providers" className="text-xs font-medium text-primary inline-flex items-center gap-1">See all <ChevronRight className="h-3.5 w-3.5" /></Link>}
