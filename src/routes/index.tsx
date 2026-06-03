@@ -211,6 +211,56 @@ function Home() {
           </p>
         </div>
       </section>
+
+      <Sheet open={!!selected} onOpenChange={(o) => !o && setSelectedId(null)}>
+        <SheetContent side="bottom" className="rounded-t-3xl border-border bg-card p-0">
+          {selected && (
+            <div className="p-6">
+              <SheetHeader className="text-left">
+                <div className="flex items-center gap-3">
+                  <div className="grid h-14 w-14 place-items-center rounded-2xl bg-emergency font-display text-base font-bold text-primary-foreground">
+                    {selected.avatar}
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <SheetTitle className="flex items-center gap-1.5 truncate font-display text-lg">
+                      {selected.workshop}
+                      {selected.verified && <ShieldCheck className="h-4 w-4 text-success" />}
+                    </SheetTitle>
+                    <SheetDescription className="truncate text-xs">
+                      {selected.name} · {selected.type}
+                    </SheetDescription>
+                  </div>
+                  <StatusPill tone="success">Trust {selected.trustScore}</StatusPill>
+                </div>
+              </SheetHeader>
+
+              <div className="mt-5 grid grid-cols-3 gap-2 text-center">
+                <Stat icon={Star} value={selected.rating} label={`${selected.reviews} reviews`} />
+                <Stat icon={MapPin} value={`${selected.distanceKm}km`} label="Away" />
+                <Stat icon={Clock} value={`${selected.etaMin}m`} label="ETA" />
+              </div>
+
+              <div className="mt-5 rounded-2xl border border-border bg-surface-elevated p-3 text-xs text-muted-foreground">
+                <p className="font-semibold text-foreground">{selected.successRate}% successful jobs</p>
+                <p className="mt-0.5">Re-verified every 6 months · ID & license on file.</p>
+              </div>
+
+              <div className="mt-5 grid grid-cols-2 gap-2">
+                <button className="flex items-center justify-center gap-2 rounded-xl border border-border bg-surface-elevated py-3 text-sm font-semibold">
+                  <Phone className="h-4 w-4 text-success" /> Call
+                </button>
+                <Link
+                  to="/sos"
+                  onClick={() => setSelectedId(null)}
+                  className="flex items-center justify-center gap-2 rounded-xl bg-primary py-3 text-sm font-semibold text-primary-foreground"
+                >
+                  <Siren className="h-4 w-4" /> Request
+                </Link>
+              </div>
+            </div>
+          )}
+        </SheetContent>
+      </Sheet>
     </AppShell>
   );
 }
