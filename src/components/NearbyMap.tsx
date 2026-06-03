@@ -47,9 +47,11 @@ function loadMapsSdk(): Promise<void> {
 export function NearbyMap({
   center,
   pins,
+  onPinClick,
 }: {
   center: LatLng;
   pins: { id: string; offsetKm: { x: number; y: number }; label: string }[];
+  onPinClick?: (id: string) => void;
 }) {
   const mapEl = useRef<HTMLDivElement>(null);
   const [ready, setReady] = useState(false);
@@ -69,7 +71,7 @@ export function NearbyMap({
           center,
           zoom: 14,
           disableDefaultUI: true,
-          gestureHandling: "none",
+          gestureHandling: "cooperative",
           keyboardShortcuts: false,
           clickableIcons: false,
           backgroundColor: "#13131a",
