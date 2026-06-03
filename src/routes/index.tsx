@@ -154,7 +154,7 @@ function Home() {
         />
         <div className="mt-4 overflow-hidden rounded-3xl border border-border">
           <div className="relative h-44 w-full">
-            <NearbyMap center={pos} pins={mapPins} />
+            <NearbyMap center={pos} pins={mapPins} onPinClick={setSelectedId} />
             <div className="pointer-events-none absolute inset-x-0 bottom-0 h-12 bg-gradient-to-b from-transparent to-card/80" />
             <Link
               to="/providers"
