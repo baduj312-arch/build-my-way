@@ -23,6 +23,7 @@ export const Route = createFileRoute("/track/$jobId")({
 const STAGES = ["Assigned", "En Route", "Arrived", "In Progress", "Completed"] as const;
 
 function TrackPage() {
+  const navigate = useNavigate();
   const { jobId } = Route.useParams();
   const { p, price, eta } = Route.useSearch();
   const provider = providers.find((x) => x.id === p) ?? providers[0];
