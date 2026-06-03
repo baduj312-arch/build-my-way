@@ -3,7 +3,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import {
   Siren, Wrench, Disc3, Truck, Fuel, BatteryCharging, Key,
-  ShieldCheck, MapPin, ChevronRight, Star, Clock, Zap, Phone,
+  ShieldCheck, MapPin, ChevronRight, Star, Clock, Zap, Phone, Navigation,
 } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
 import { NearbyMap, useGeolocation } from "@/components/NearbyMap";
