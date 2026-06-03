@@ -14,16 +14,235 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      analytics_events: {
+        Row: {
+          created_at: string
+          event: string
+          id: string
+          props: Json
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          event: string
+          id?: string
+          props?: Json
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          event?: string
+          id?: string
+          props?: Json
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      jobs: {
+        Row: {
+          completed_at: string | null
+          created_at: string
+          dest_lat: number | null
+          dest_lng: number | null
+          driver_id: string
+          eta_min: number
+          id: string
+          notes: string | null
+          pickup_lat: number
+          pickup_lng: number
+          price: number
+          provider_id: string | null
+          status: Database["public"]["Enums"]["job_status"]
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string
+          dest_lat?: number | null
+          dest_lng?: number | null
+          driver_id: string
+          eta_min?: number
+          id?: string
+          notes?: string | null
+          pickup_lat: number
+          pickup_lng: number
+          price?: number
+          provider_id?: string | null
+          status?: Database["public"]["Enums"]["job_status"]
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string
+          dest_lat?: number | null
+          dest_lng?: number | null
+          driver_id?: string
+          eta_min?: number
+          id?: string
+          notes?: string | null
+          pickup_lat?: number
+          pickup_lng?: number
+          price?: number
+          provider_id?: string | null
+          status?: Database["public"]["Enums"]["job_status"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "jobs_provider_id_fkey"
+            columns: ["provider_id"]
+            isOneToOne: false
+            referencedRelation: "providers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          full_name: string | null
+          id: string
+          phone: string | null
+        }
+        Insert: {
+          created_at?: string
+          full_name?: string | null
+          id: string
+          phone?: string | null
+        }
+        Update: {
+          created_at?: string
+          full_name?: string | null
+          id?: string
+          phone?: string | null
+        }
+        Relationships: []
+      }
+      provider_locations: {
+        Row: {
+          heading: number | null
+          lat: number
+          lng: number
+          provider_id: string
+          speed: number | null
+          updated_at: string
+        }
+        Insert: {
+          heading?: number | null
+          lat: number
+          lng: number
+          provider_id: string
+          speed?: number | null
+          updated_at?: string
+        }
+        Update: {
+          heading?: number | null
+          lat?: number
+          lng?: number
+          provider_id?: string
+          speed?: number | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "provider_locations_provider_id_fkey"
+            columns: ["provider_id"]
+            isOneToOne: true
+            referencedRelation: "providers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      providers: {
+        Row: {
+          active: boolean
+          avatar: string | null
+          created_at: string
+          home_lat: number
+          home_lng: number
+          id: string
+          name: string
+          phone: string | null
+          rating: number
+          type: Database["public"]["Enums"]["provider_type"]
+          user_id: string | null
+          verified: boolean
+          workshop: string
+        }
+        Insert: {
+          active?: boolean
+          avatar?: string | null
+          created_at?: string
+          home_lat: number
+          home_lng: number
+          id?: string
+          name: string
+          phone?: string | null
+          rating?: number
+          type?: Database["public"]["Enums"]["provider_type"]
+          user_id?: string | null
+          verified?: boolean
+          workshop: string
+        }
+        Update: {
+          active?: boolean
+          avatar?: string | null
+          created_at?: string
+          home_lat?: number
+          home_lng?: number
+          id?: string
+          name?: string
+          phone?: string | null
+          rating?: number
+          type?: Database["public"]["Enums"]["provider_type"]
+          user_id?: string | null
+          verified?: boolean
+          workshop?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "driver" | "provider" | "admin"
+      job_status:
+        | "pending"
+        | "assigned"
+        | "enroute"
+        | "arrived"
+        | "in_progress"
+        | "completed"
+        | "cancelled"
+      provider_type: "mechanic" | "vulcanizer" | "tow" | "battery" | "fuel"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +369,18 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["driver", "provider", "admin"],
+      job_status: [
+        "pending",
+        "assigned",
+        "enroute",
+        "arrived",
+        "in_progress",
+        "completed",
+        "cancelled",
+      ],
+      provider_type: ["mechanic", "vulcanizer", "tow", "battery", "fuel"],
+    },
   },
 } as const
