@@ -1,8 +1,8 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import {
-  Phone, MessageCircle, ShieldCheck, Star, ChevronLeft, Navigation, Share2, Siren,
+  Phone, MessageCircle, ShieldCheck, Star, ChevronLeft, Navigation, Share2, Siren, CheckCircle2,
 } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
 import { StatusPill } from "@/components/StatusPill";
@@ -23,6 +23,7 @@ export const Route = createFileRoute("/track/$jobId")({
 const STAGES = ["Assigned", "En Route", "Arrived", "In Progress", "Completed"] as const;
 
 function TrackPage() {
+  const navigate = useNavigate();
   const { jobId } = Route.useParams();
   const { p, price, eta } = Route.useSearch();
   const provider = providers.find((x) => x.id === p) ?? providers[0];
@@ -173,7 +174,7 @@ function TrackPage() {
         </div>
 
         {/* Safety */}
-        <div className="mt-4 mb-6 rounded-2xl border border-success/30 bg-success/5 p-4">
+        <div className="mt-4 rounded-2xl border border-success/30 bg-success/5 p-4">
           <div className="flex items-center gap-3">
             <ShieldCheck className="h-5 w-5 text-success" />
             <div className="flex-1 text-xs">
@@ -182,6 +183,24 @@ function TrackPage() {
             </div>
           </div>
         </div>
+
+        <button
+          onClick={() => {
+            setStageIdx(STAGES.length - 1);
+            setTimeout(
+              () =>
+                navigate({
+                  to: "/rate/$jobId",
+                  params: { jobId },
+                  search: { p: provider.id, price },
+                }),
+              600
+            );
+          }}
+          className="mt-4 mb-6 flex w-full items-center justify-center gap-2 rounded-2xl bg-success px-6 py-4 font-display text-base font-bold text-success-foreground transition-transform active:scale-[0.98]"
+        >
+          <CheckCircle2 className="h-5 w-5" /> Mark job complete
+        </button>
       </section>
     </AppShell>
   );
