@@ -2,9 +2,10 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import {
-  Phone, MessageCircle, ShieldCheck, Star, ChevronLeft, Navigation, Share2, Siren, CheckCircle2,
+  Phone, MessageCircle, ShieldCheck, Star, ChevronLeft, Share2, CheckCircle2,
 } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
+import { LiveMap } from "@/components/LiveMap";
 import { StatusPill } from "@/components/StatusPill";
 import { providers } from "@/lib/mock-data";
 
