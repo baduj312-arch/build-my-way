@@ -96,12 +96,13 @@ export function NearbyMap({
         const latPerKm = 1 / 111;
         const lngPerKm = 1 / (111 * Math.cos((center.lat * Math.PI) / 180));
         pins.forEach((p) => {
-          new g.maps.Marker({
+          const marker = new g.maps.Marker({
             map,
             position: {
               lat: center.lat + p.offsetKm.y * latPerKm,
               lng: center.lng + p.offsetKm.x * lngPerKm,
             },
+            cursor: onPinClick ? "pointer" : "default",
             label: {
               text: p.label,
               color: "#ffffff",
@@ -117,6 +118,9 @@ export function NearbyMap({
               strokeWeight: 2,
             },
           });
+          if (onPinClick) {
+            marker.addListener("click", () => onPinClick(p.id));
+          }
         });
 
         setReady(true);
