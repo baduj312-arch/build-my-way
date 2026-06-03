@@ -15,6 +15,7 @@ import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as HistoryRouteImport } from './routes/history'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as TrackJobIdRouteImport } from './routes/track.$jobId'
+import { Route as RateJobIdRouteImport } from './routes/rate.$jobId'
 
 const SosRoute = SosRouteImport.update({
   id: '/sos',
@@ -46,6 +47,11 @@ const TrackJobIdRoute = TrackJobIdRouteImport.update({
   path: '/track/$jobId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RateJobIdRoute = RateJobIdRouteImport.update({
+  id: '/rate/$jobId',
+  path: '/rate/$jobId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -53,6 +59,7 @@ export interface FileRoutesByFullPath {
   '/profile': typeof ProfileRoute
   '/providers': typeof ProvidersRoute
   '/sos': typeof SosRoute
+  '/rate/$jobId': typeof RateJobIdRoute
   '/track/$jobId': typeof TrackJobIdRoute
 }
 export interface FileRoutesByTo {
@@ -61,6 +68,7 @@ export interface FileRoutesByTo {
   '/profile': typeof ProfileRoute
   '/providers': typeof ProvidersRoute
   '/sos': typeof SosRoute
+  '/rate/$jobId': typeof RateJobIdRoute
   '/track/$jobId': typeof TrackJobIdRoute
 }
 export interface FileRoutesById {
@@ -70,6 +78,7 @@ export interface FileRoutesById {
   '/profile': typeof ProfileRoute
   '/providers': typeof ProvidersRoute
   '/sos': typeof SosRoute
+  '/rate/$jobId': typeof RateJobIdRoute
   '/track/$jobId': typeof TrackJobIdRoute
 }
 export interface FileRouteTypes {
@@ -80,9 +89,17 @@ export interface FileRouteTypes {
     | '/profile'
     | '/providers'
     | '/sos'
+    | '/rate/$jobId'
     | '/track/$jobId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/history' | '/profile' | '/providers' | '/sos' | '/track/$jobId'
+  to:
+    | '/'
+    | '/history'
+    | '/profile'
+    | '/providers'
+    | '/sos'
+    | '/rate/$jobId'
+    | '/track/$jobId'
   id:
     | '__root__'
     | '/'
@@ -90,6 +107,7 @@ export interface FileRouteTypes {
     | '/profile'
     | '/providers'
     | '/sos'
+    | '/rate/$jobId'
     | '/track/$jobId'
   fileRoutesById: FileRoutesById
 }
@@ -99,6 +117,7 @@ export interface RootRouteChildren {
   ProfileRoute: typeof ProfileRoute
   ProvidersRoute: typeof ProvidersRoute
   SosRoute: typeof SosRoute
+  RateJobIdRoute: typeof RateJobIdRoute
   TrackJobIdRoute: typeof TrackJobIdRoute
 }
 
@@ -146,6 +165,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TrackJobIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/rate/$jobId': {
+      id: '/rate/$jobId'
+      path: '/rate/$jobId'
+      fullPath: '/rate/$jobId'
+      preLoaderRoute: typeof RateJobIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -155,6 +181,7 @@ const rootRouteChildren: RootRouteChildren = {
   ProfileRoute: ProfileRoute,
   ProvidersRoute: ProvidersRoute,
   SosRoute: SosRoute,
+  RateJobIdRoute: RateJobIdRoute,
   TrackJobIdRoute: TrackJobIdRoute,
 }
 export const routeTree = rootRouteImport
