@@ -25,6 +25,15 @@ export const Route = createFileRoute("/")({
 
 function Home() {
   const nearby = providers.slice(0, 3);
+  const { pos, state } = useGeolocation({ lat: 5.6502, lng: -0.1469 });
+  const mapPins = providers.slice(0, 5).map((p, i) => ({
+    id: p.id,
+    label: String(i + 1),
+    offsetKm: {
+      x: Math.cos((i / 5) * Math.PI * 2) * p.distanceKm,
+      y: Math.sin((i / 5) * Math.PI * 2) * p.distanceKm,
+    },
+  }));
   return (
     <AppShell>
       {/* Header */}
